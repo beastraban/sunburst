@@ -10,7 +10,7 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.9"
 authors = [
-    { name = "Ira Wolfson", email = "wolfsoni@braude.ac.il" }
+    { name = "Ira Wolfson", email = "irawolfsonprof@gmail.com" }
 ]
 keywords = [
     "bayesian",
