@@ -1,0 +1,143 @@
+{
+  "benchmark_version": "1.0",
+  "timestamp": "2026-01-25T01:23:15.652233",
+  "configuration": {
+    "methods": [
+      "sunburst"
+    ],
+    "functions": [
+      "gaussian",
+      "correlated",
+      "cigar",
+      "offcenter",
+      "rotated_cigar",
+      "mixture",
+      "spherical"
+    ],
+    "dimensions": [
+      768,
+      1024
+    ],
+    "n_runs": 5,
+    "target_error": 0.001
+  },
+  "overall": {
+    "total_runs": 44,
+    "successful": 40,
+    "failed": 4,
+    "timed_out": 3
+  },
+  "method_summary": {
+    "sunburst": {
+      "total_runs": 41,
+      "successful_runs": 40,
+      "success_rate": 0.975609756097561,
+      "dimensions_tested": [
+        768,
+        1024
+      ],
+      "max_dimension_success": 1024,
+      "mean_time_seconds": 105.44668698000024,
+      "mean_error_percent": 0.9836059252149676,
+      "total_likelihood_calls": 714112491
+    }
+  },
+  "detailed_results": [
+    {
+      "dimension": 768,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 5,
+      "n_total": 5,
+      "time_mean": 4.825269460002891,
+      "time_std": 2.1071700925839343,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 5862521.0
+    },
+    {
+      "dimension": 768,
+      "function": "cigar",
+      "method": "sunburst",
+      "n_success": 5,
+      "n_total": 5,
+      "time_mean": 93.22260373998434,
+      "time_std": 114.87426303229383,
+      "error_mean": 2.875047212881278e-07,
+      "error_std": 0.0,
+      "calls_mean": 27969877.0
+    },
+    {
+      "dimension": 768,
+      "function": "offcenter",
+      "method": "sunburst",
+      "n_success": 5,
+      "n_total": 5,
+      "time_mean": 5.427222400007304,
+      "time_std": 0.07210849466111939,
+      "error_mean": 2.1401041854123995e-07,
+      "error_std": 0.0,
+      "calls_mean": 5862521.0
+    },
+    {
+      "dimension": 768,
+      "function": "mixture",
+      "method": "sunburst",
+      "n_success": 5,
+      "n_total": 5,
+      "time_mean": 630.6117451200029,
+      "time_std": 81.9084077111112,
+      "error_mean": 7.868721911000837,
+      "error_std": 3.9398399225321565,
+      "calls_mean": 73225031.2
+    },
+    {
+      "dimension": 768,
+      "function": "spherical",
+      "method": "sunburst",
+      "n_success": 5,
+      "n_total": 5,
+      "time_mean": 5.143276920006611,
+      "time_std": 0.13232699829962524,
+      "error_mean": 6.238759667166208e-05,
+      "error_std": 0.0,
+      "calls_mean": 5861521.0
+    },
+    {
+      "dimension": 1024,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 5,
+      "n_total": 5,
+      "time_mean": 8.014633439993485,
+      "time_std": 0.12242480321680449,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 8014009.0
+    },
+    {
+      "dimension": 1024,
+      "function": "offcenter",
+      "method": "sunburst",
+      "n_success": 5,
+      "n_total": 5,
+      "time_mean": 8.576288099994418,
+      "time_std": 0.19573034356525112,
+      "error_mean": 2.1401041854124e-07,
+      "error_std": 2.6469779601696886e-23,
+      "calls_mean": 8014009.0
+    },
+    {
+      "dimension": 1024,
+      "function": "spherical",
+      "method": "sunburst",
+      "n_success": 5,
+      "n_total": 5,
+      "time_mean": 87.75245666000993,
+      "time_std": 159.01461577868162,
+      "error_mean": 6.238759667488386e-05,
+      "error_std": 5.918746189943226e-15,
+      "calls_mean": 8013009.0
+    }
+  ]
+}

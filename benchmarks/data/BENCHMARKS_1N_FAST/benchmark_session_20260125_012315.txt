@@ -1,0 +1,84 @@
+======================================================================
+SUNBURST BENCHMARK SUITE v1.9.0 SESSION LOG
+======================================================================
+
+Timestamp: 2026-01-25T01:23:15.616841
+Pipeline: SUNBURST_PIPELINE_v1_7
+
+CONFIGURATION:
+  n_oscillations: 1
+  greendragon_fast: True
+  greendragon_maxiter: 20
+  runs_per_config: 5
+  target_error: 0.10%
+  dimensions: [768, 1024]
+  test_functions: [gaussian, correlated, cigar, offcenter, rotated_cigar, mixture, spherical]
+  methods: [sunburst]
+
+CPU INFORMATION:
+  Name: 12th Gen Intel(R) Core(TM) i9-12900H
+  Architecture: AMD64
+  Physical Cores: 14
+  Logical Cores: 20
+
+GPU INFORMATION:
+  Available: True
+  Name: NVIDIA GeForce RTX 3080 Laptop GPU
+  Memory: 8191 MB
+  CUDA Version: 13.0
+
+======================================================================
+
+======================================================================
+SUMMARY STATISTICS
+======================================================================
+
+Total runs: 44
+Successful: 40 (90.9%)
+Failed: 4 (9.1%)
+Timed out: 3 (6.8%)
+
+--------------------------------------------------
+PER-METHOD SUMMARY
+--------------------------------------------------
+
+sunburst:
+  Total runs: 41
+  Success rate: 97.6%
+  Time: 105.45s ± 215.21s
+  Time range: 3.74s - 759.71s
+  Error: 0.9836% ± 2.9517%
+  Max dimension (success): 1024D
+
+--------------------------------------------------
+PER-DIMENSION BREAKDOWN
+--------------------------------------------------
+
+   Dim | Method       |  Success |     Time (s) |    Error (%)
+------------------------------------------------------------
+   768 | sunburst     |  25/25   |      147.846 |       1.5738
+  1024 | sunburst     |  15/16   |       34.781 |       0.0000
+
+--------------------------------------------------
+FAILURE DETAILS
+--------------------------------------------------
+
+runner | correlated | D=768 | run=0
+  Error: TIMEOUT: Exceeded 900s (pools terminated)
+  Timed out: True
+
+runner | rotated_cigar | D=768 | run=0
+  Error: TIMEOUT: Exceeded 900s (pools terminated)
+  Timed out: True
+
+sunburst | cigar | D=1024 | run=0
+  Error: Out of memory (tried to allocate 15.98 GB)
+  Timed out: False
+
+runner | mixture | D=1024 | run=0
+  Error: TIMEOUT: Exceeded 900s (pools terminated)
+  Timed out: True
+
+
+======================================================================
+END OF LOG

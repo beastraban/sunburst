@@ -1,0 +1,89 @@
+% Failure Mode Benchmark Results
+% Generated: 20260125_212644
+
+\begin{table}[htbp]
+\centering
+\caption{SunBURST performance on non-Gaussian test functions where Laplace approximation is expected to degrade.}
+\label{tab:failure-modes}
+\begin{tabular}{llrrrl}
+\toprule
+Function & Failure Mode & Dim & Error (log) & Time (s) & Status \\
+\midrule
+student\_t\_nu3.0\_2D & Heavy tails: Laplace & 2 & 0.300 & 10.2 & \textcolor{orange}{Degraded} \\
+student\_t\_cauchy\_2D & Heavy tails: Laplace & 2 & 0.716 & 4.7 & \textcolor{orange}{Degraded} \\
+banana\_b0.1\_2D & Curved degeneracy: m & 2 & 0.005 & 1.9 & \textcolor{green}{OK} \\
+banana\_b0.5\_2D & Curved degeneracy: m & 2 & 0.092 & 2.2 & \textcolor{green}{OK} \\
+funnel\_sigma3.0\_2D & Varying curvature: H & 2 & 1.125 & 7.5 & \textcolor{red}{Failed} \\
+exp\_power\_beta1.0\_2D & Non-quadratic: |x|^1 & 2 & 0.126 & 8.0 & \textcolor{orange}{Degraded} \\
+exp\_power\_beta0.5\_2D & Non-quadratic: |x|^0 & 2 & 1.786 & 9.1 & \textcolor{red}{Failed} \\
+ring\_R3.0\_w0.3\_2D & Saddle point: max pr & 2 & 13.774 & 10.2 & \textcolor{red}{Failed} \\
+twisted\_t1.0\_2D & Nonlinear correlatio & 2 & 0.382 & 1.8 & \textcolor{orange}{Degraded} \\
+skew\_normal\_a5.0\_2D & Asymmetry: mode != m & 2 & - & - & \textcolor{red}{Error} \\
+bimodal\_w0.9\_2D & Unequal weights: cur & 2 & 0.000 & 0.9 & \textcolor{green}{OK} \\
+student\_t\_nu3.0\_4D & Heavy tails: Laplace & 4 & 0.032 & 6.6 & \textcolor{green}{OK} \\
+student\_t\_cauchy\_4D & Heavy tails: Laplace & 4 & 1.459 & 5.3 & \textcolor{red}{Failed} \\
+banana\_b0.1\_4D & Curved degeneracy: m & 4 & 0.004 & 4.8 & \textcolor{green}{OK} \\
+banana\_b0.5\_4D & Curved degeneracy: m & 4 & 0.092 & 10.1 & \textcolor{green}{OK} \\
+funnel\_sigma3.0\_4D & Varying curvature: H & 4 & N/A & 19.2 & \textcolor{red}{Failed} \\
+exp\_power\_beta1.0\_4D & Non-quadratic: |x|^1 & 4 & 0.037 & 17.6 & \textcolor{green}{OK} \\
+exp\_power\_beta0.5\_4D & Non-quadratic: |x|^0 & 4 & 3.572 & 21.8 & \textcolor{red}{Failed} \\
+ring\_R3.0\_w0.3\_4D & Saddle point: max pr & 4 & 31.009 & 57.2 & \textcolor{red}{Failed} \\
+twisted\_t1.0\_4D & Nonlinear correlatio & 4 & 0.382 & 3.0 & \textcolor{orange}{Degraded} \\
+skew\_normal\_a5.0\_4D & Asymmetry: mode != m & 4 & - & - & \textcolor{red}{Error} \\
+bimodal\_w0.9\_4D & Unequal weights: cur & 4 & 0.000 & 2.3 & \textcolor{green}{OK} \\
+student\_t\_nu3.0\_8D & Heavy tails: Laplace & 8 & 0.000 & 12.6 & \textcolor{green}{OK} \\
+student\_t\_cauchy\_8D & Heavy tails: Laplace & 8 & 2.858 & 8.0 & \textcolor{red}{Failed} \\
+banana\_b0.1\_8D & Curved degeneracy: m & 8 & 0.005 & 4.0 & \textcolor{green}{OK} \\
+banana\_b0.5\_8D & Curved degeneracy: m & 8 & 0.092 & 3.7 & \textcolor{green}{OK} \\
+funnel\_sigma3.0\_8D & Varying curvature: H & 8 & N/A & 22.8 & \textcolor{red}{Failed} \\
+exp\_power\_beta1.0\_8D & Non-quadratic: |x|^1 & 8 & 0.199 & 16.7 & \textcolor{orange}{Degraded} \\
+exp\_power\_beta0.5\_8D & Non-quadratic: |x|^0 & 8 & 7.144 & 16.6 & \textcolor{red}{Failed} \\
+ring\_R3.0\_w0.3\_8D & Saddle point: max pr & 8 & 69.746 & 65.7 & \textcolor{red}{Failed} \\
+twisted\_t1.0\_8D & Nonlinear correlatio & 8 & 0.382 & 4.3 & \textcolor{orange}{Degraded} \\
+skew\_normal\_a5.0\_8D & Asymmetry: mode != m & 8 & - & - & \textcolor{red}{Error} \\
+bimodal\_w0.9\_8D & Unequal weights: cur & 8 & 0.000 & 2.1 & \textcolor{green}{OK} \\
+student\_t\_nu3.0\_16D & Heavy tails: Laplace & 16 & 0.002 & 9.3 & \textcolor{green}{OK} \\
+student\_t\_cauchy\_16D & Heavy tails: Laplace & 16 & 0.027 & 16.2 & \textcolor{green}{OK} \\
+banana\_b0.1\_16D & Curved degeneracy: m & 16 & 0.004 & 3.9 & \textcolor{green}{OK} \\
+funnel\_sigma3.0\_16D & Varying curvature: H & 16 & N/A & 23.6 & \textcolor{red}{Failed} \\
+exp\_power\_beta1.0\_16D & Non-quadratic: |x|^1 & 16 & 0.311 & 21.6 & \textcolor{orange}{Degraded} \\
+ring\_R3.0\_w0.3\_16D & Saddle point: max pr & 16 & 159.885 & 28.2 & \textcolor{red}{Failed} \\
+twisted\_t1.0\_16D & Nonlinear correlatio & 16 & 0.382 & 4.4 & \textcolor{orange}{Degraded} \\
+skew\_normal\_a5.0\_16D & Asymmetry: mode != m & 16 & - & - & \textcolor{red}{Error} \\
+bimodal\_w0.9\_16D & Unequal weights: cur & 16 & 0.000 & 5.0 & \textcolor{green}{OK} \\
+student\_t\_nu3.0\_24D & Heavy tails: Laplace & 24 & 8.385 & 10.8 & \textcolor{red}{Failed} \\
+student\_t\_cauchy\_24D & Heavy tails: Laplace & 24 & 0.027 & 19.8 & \textcolor{green}{OK} \\
+banana\_b0.1\_24D & Curved degeneracy: m & 24 & 0.009 & 3.9 & \textcolor{green}{OK} \\
+funnel\_sigma3.0\_24D & Varying curvature: H & 24 & N/A & 16.1 & \textcolor{red}{Failed} \\
+exp\_power\_beta1.0\_24D & Non-quadratic: |x|^1 & 24 & 15.470 & 22.1 & \textcolor{red}{Failed} \\
+twisted\_t1.0\_24D & Nonlinear correlatio & 24 & 0.382 & 7.1 & \textcolor{orange}{Degraded} \\
+skew\_normal\_a5.0\_24D & Asymmetry: mode != m & 24 & - & - & \textcolor{red}{Error} \\
+bimodal\_w0.9\_24D & Unequal weights: cur & 24 & 0.000 & 2.9 & \textcolor{green}{OK} \\
+student\_t\_nu3.0\_32D & Heavy tails: Laplace & 32 & 11.639 & 11.1 & \textcolor{red}{Failed} \\
+student\_t\_cauchy\_32D & Heavy tails: Laplace & 32 & 0.017 & 20.0 & \textcolor{green}{OK} \\
+banana\_b0.1\_32D & Curved degeneracy: m & 32 & 0.009 & 3.0 & \textcolor{green}{OK} \\
+funnel\_sigma3.0\_32D & Varying curvature: H & 32 & N/A & 23.1 & \textcolor{red}{Failed} \\
+exp\_power\_beta1.0\_32D & Non-quadratic: |x|^1 & 32 & 4.139 & 23.4 & \textcolor{red}{Failed} \\
+twisted\_t1.0\_32D & Nonlinear correlatio & 32 & 0.382 & 6.9 & \textcolor{orange}{Degraded} \\
+skew\_normal\_a5.0\_32D & Asymmetry: mode != m & 32 & - & - & \textcolor{red}{Error} \\
+bimodal\_w0.9\_32D & Unequal weights: cur & 32 & 0.000 & 3.5 & \textcolor{green}{OK} \\
+student\_t\_nu3.0\_48D & Heavy tails: Laplace & 48 & 20.755 & 10.7 & \textcolor{red}{Failed} \\
+student\_t\_cauchy\_48D & Heavy tails: Laplace & 48 & 0.033 & 20.2 & \textcolor{green}{OK} \\
+banana\_b0.1\_48D & Curved degeneracy: m & 48 & 0.008 & 3.5 & \textcolor{green}{OK} \\
+funnel\_sigma3.0\_48D & Varying curvature: H & 48 & N/A & 21.8 & \textcolor{red}{Failed} \\
+exp\_power\_beta1.0\_48D & Non-quadratic: |x|^1 & 48 & 6.894 & 23.5 & \textcolor{red}{Failed} \\
+twisted\_t1.0\_48D & Nonlinear correlatio & 48 & 0.382 & 5.0 & \textcolor{orange}{Degraded} \\
+skew\_normal\_a5.0\_48D & Asymmetry: mode != m & 48 & - & - & \textcolor{red}{Error} \\
+bimodal\_w0.9\_48D & Unequal weights: cur & 48 & 0.000 & 5.4 & \textcolor{green}{OK} \\
+student\_t\_nu3.0\_64D & Heavy tails: Laplace & 64 & 28.754 & 7.3 & \textcolor{red}{Failed} \\
+student\_t\_cauchy\_64D & Heavy tails: Laplace & 64 & 0.129 & 21.1 & \textcolor{orange}{Degraded} \\
+banana\_b0.1\_64D & Curved degeneracy: m & 64 & 0.008 & 3.5 & \textcolor{green}{OK} \\
+funnel\_sigma3.0\_64D & Varying curvature: H & 64 & N/A & 24.8 & \textcolor{red}{Failed} \\
+exp\_power\_beta1.0\_64D & Non-quadratic: |x|^1 & 64 & 47.920 & 26.8 & \textcolor{red}{Failed} \\
+twisted\_t1.0\_64D & Nonlinear correlatio & 64 & 0.378 & 6.3 & \textcolor{orange}{Degraded} \\
+skew\_normal\_a5.0\_64D & Asymmetry: mode != m & 64 & - & - & \textcolor{red}{Error} \\
+bimodal\_w0.9\_64D & Unequal weights: cur & 64 & 0.000 & 7.9 & \textcolor{green}{OK} \\
+egg\_box\_omega5.0\_2D & Many modes: must fin & 2 & 0.697 & 2.1 & \textcolor{orange}{Degraded} \\
+\bottomrule
+\end{tabular}
+\end{table}

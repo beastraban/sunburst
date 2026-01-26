@@ -1,0 +1,10 @@
+SUNBURST BENCHMARK CONFIG
+Timestamp: 20260125_120406
+n_oscillations: 1
+greendragon_fast: True
+runs: 30
+dimensions: [2, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512, 768, 1024]
+functions: ['gaussian']
+methods: ['sunburst']
+GPU: NVIDIA GeForce RTX 3080 Laptop GPU
+CPU: 12th Gen Intel(R) Core(TM) i9-12900H

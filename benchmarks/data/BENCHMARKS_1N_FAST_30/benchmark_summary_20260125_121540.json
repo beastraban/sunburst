@@ -1,0 +1,289 @@
+{
+  "benchmark_version": "1.0",
+  "timestamp": "2026-01-25T12:15:41.034317",
+  "configuration": {
+    "methods": [
+      "sunburst"
+    ],
+    "functions": [
+      "gaussian"
+    ],
+    "dimensions": [
+      2,
+      4,
+      6,
+      8,
+      12,
+      16,
+      24,
+      32,
+      48,
+      64,
+      96,
+      128,
+      192,
+      256,
+      384,
+      512,
+      768,
+      1024
+    ],
+    "n_runs": 30,
+    "target_error": 0.001
+  },
+  "overall": {
+    "total_runs": 540,
+    "successful": 540,
+    "failed": 0,
+    "timed_out": 0
+  },
+  "method_summary": {
+    "sunburst": {
+      "total_runs": 540,
+      "successful_runs": 540,
+      "success_rate": 1.0,
+      "dimensions_tested": [
+        2,
+        4,
+        6,
+        8,
+        12,
+        16,
+        24,
+        32,
+        48,
+        64,
+        96,
+        128,
+        192,
+        256,
+        384,
+        512,
+        768,
+        1024
+      ],
+      "max_dimension_success": 1024,
+      "mean_time_seconds": 1.0836269868505446,
+      "mean_error_percent": 1.7152861795107328e-16,
+      "total_likelihood_calls": 995323730
+    }
+  },
+  "detailed_results": [
+    {
+      "dimension": 2,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.331067983332711,
+      "time_std": 0.9895348925018764,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 486494.3333333333
+    },
+    {
+      "dimension": 4,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.14963704667170533,
+      "time_std": 0.010638036064534213,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 493414.6666666667
+    },
+    {
+      "dimension": 6,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.15678977666345115,
+      "time_std": 0.02555679417792714,
+      "error_mean": 5.369591518468381e-16,
+      "error_std": 2.8916135273943844e-15,
+      "calls_mean": 499200.3333333333
+    },
+    {
+      "dimension": 8,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.2186586499932067,
+      "time_std": 0.05865329325761927,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 507660.6666666667
+    },
+    {
+      "dimension": 12,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.25047620999782033,
+      "time_std": 0.06305584850347214,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 520002.6666666667
+    },
+    {
+      "dimension": 16,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.21346060666255653,
+      "time_std": 0.06734685411000157,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 536414.3333333334
+    },
+    {
+      "dimension": 24,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.2087727933365386,
+      "time_std": 0.04337366341598356,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 557920.0
+    },
+    {
+      "dimension": 32,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.24513304666227972,
+      "time_std": 0.07316402129279143,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 589628.6666666666
+    },
+    {
+      "dimension": 48,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.301139736676123,
+      "time_std": 0.06969561309088888,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 778533.0
+    },
+    {
+      "dimension": 64,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.3110017799946945,
+      "time_std": 0.06294011336200785,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 890485.0
+    },
+    {
+      "dimension": 96,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.37338869332452307,
+      "time_std": 0.06734840026048616,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 1078697.0
+    },
+    {
+      "dimension": 128,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.42474339333518096,
+      "time_std": 0.0979707234573061,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 1313565.0
+    },
+    {
+      "dimension": 192,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.5921625133390384,
+      "time_std": 0.0688098963486778,
+      "error_mean": 5.369591518468381e-16,
+      "error_std": 2.8916135273943848e-15,
+      "calls_mean": 1713049.0
+    },
+    {
+      "dimension": 256,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 0.9440309566620272,
+      "time_std": 0.1258179357136437,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 2205285.0
+    },
+    {
+      "dimension": 384,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 1.4122109899976445,
+      "time_std": 0.13135312053026088,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 3050325.0
+    },
+    {
+      "dimension": 512,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 2.2419162599932556,
+      "time_std": 0.10877653558182827,
+      "error_mean": 8.054387277702571e-16,
+      "error_std": 3.0136757653553882e-15,
+      "calls_mean": 4080253.0
+    },
+    {
+      "dimension": 768,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 4.3136244366702154,
+      "time_std": 0.202988103563295,
+      "error_mean": 0.0,
+      "error_std": 0.0,
+      "calls_mean": 5862521.0
+    },
+    {
+      "dimension": 1024,
+      "function": "gaussian",
+      "method": "sunburst",
+      "n_success": 30,
+      "n_total": 30,
+      "time_mean": 6.81707088999683,
+      "time_std": 0.26636067866752544,
+      "error_mean": 1.2081580916553856e-15,
+      "error_std": 3.6244742749661574e-15,
+      "calls_mean": 8014009.0
+    }
+  ]
+}

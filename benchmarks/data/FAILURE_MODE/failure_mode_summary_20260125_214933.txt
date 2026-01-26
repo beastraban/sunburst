@@ -1,0 +1,157 @@
+==========================================================================================
+SUNBURST FAILURE MODE BENCHMARK RESULTS
+==========================================================================================
+Timestamp: 20260125_214933
+Configuration: n_oscillations=3, greendragon_fast=False
+Dimensions tested: [2, 4, 8, 16, 24, 32, 48, 64]
+
+Function                             Dim  True log(Z)     Computed      Error Status    
+------------------------------------------------------------------------------------------
+student_t_nu3.0_2D                     2       1.8379       1.5379     0.3000 OK        
+student_t_cauchy_2D                    2       1.8379       1.1221     0.7158 OK        
+banana_b0.1_2D                         2       1.8379       1.8324     0.0055 OK        
+banana_b0.5_2D                         2       1.8379       1.7457     0.0922 OK        
+funnel_sigma3.0_2D                     2       0.0000      -1.1250     1.1250 DEGRADED  
+exp_power_beta1.0_2D                   2       1.3863       1.3082     0.0781 OK        
+exp_power_beta0.5_2D                   2       2.7726       0.9867     1.7859 DEGRADED  
+ring_R3.0_w0.3_2D                      2       2.6515      16.6284    13.9769 DEGRADED  
+twisted_t1.0_2D                        2       0.0000       0.3823     0.3823 OK        
+skew_normal_a5.0_2D                    2       0.0000       0.0110     0.0110 OK        
+bimodal_w0.9_2D                        2       0.0000       0.0002     0.0002 OK        
+student_t_nu3.0_4D                     4       3.1649       3.1327     0.0323 OK        
+student_t_cauchy_4D                    4       2.5771       1.1185     1.4586 DEGRADED  
+banana_b0.1_4D                         4       3.6758       3.6704     0.0053 OK        
+banana_b0.5_4D                         4       3.6758       3.5836     0.0922 OK        
+funnel_sigma3.0_4D                     4       0.0000          nan        N/A DEGRADED  
+exp_power_beta1.0_4D                   4       2.7726       2.8456     0.0730 OK        
+exp_power_beta0.5_4D                   4       5.5452       1.9734     3.5718 DEGRADED  
+ring_R3.0_w0.3_4D                      4       5.9934      37.0055    31.0121 DEGRADED  
+twisted_t1.0_4D                        4       0.0000       0.3823     0.3823 OK        
+skew_normal_a5.0_4D                    4       0.0000      -0.0012     0.0012 OK        
+bimodal_w0.9_4D                        4       0.0000       0.0002     0.0002 OK        
+student_t_nu3.0_8D                     8       4.8948       4.8948     0.0000 OK        
+student_t_cauchy_8D                    8       2.6975      -0.1604     2.8579 DEGRADED  
+banana_b0.1_8D                         8       7.3515       7.3467     0.0048 OK        
+banana_b0.5_8D                         8       7.3515       7.2593     0.0922 OK        
+funnel_sigma3.0_8D                     8       0.0000          nan        N/A DEGRADED  
+exp_power_beta1.0_8D                   8       5.5452       5.5667     0.0215 OK        
+exp_power_beta0.5_8D                   8      11.0904       3.9468     7.1436 DEGRADED  
+ring_R3.0_w0.3_8D                      8      10.8856      79.3941    68.5085 DEGRADED  
+twisted_t1.0_8D                        8       0.0000       0.3823     0.3823 OK        
+skew_normal_a5.0_8D                    8       0.0000      -3.1450     3.1450 DEGRADED  
+bimodal_w0.9_8D                        8       0.0000       0.0002     0.0002 OK        
+student_t_nu3.0_16D                   16       6.1366       6.1383     0.0017 OK        
+student_t_cauchy_16D                  16       0.1809       0.1540     0.0269 OK        
+banana_b0.1_16D                       16      14.7030      14.6989     0.0041 OK        
+funnel_sigma3.0_16D                   16       0.0000          nan        N/A DEGRADED  
+exp_power_beta1.0_16D                 16      11.0904      11.7876     0.6972 OK        
+ring_R3.0_w0.3_16D                    16      17.5200     180.2305   162.7105 DEGRADED  
+twisted_t1.0_16D                      16       0.0000       0.3823     0.3823 OK        
+skew_normal_a5.0_16D                  16       0.0000      -6.5242     6.5242 DEGRADED  
+bimodal_w0.9_16D                      16       0.0000       0.0002     0.0002 OK        
+student_t_nu3.0_24D                   24       5.5392      -2.8455     8.3847 DEGRADED  
+student_t_cauchy_24D                  24      -4.4252      -4.4520     0.0268 OK        
+banana_b0.1_24D                       24      22.0545      22.0463     0.0082 OK        
+funnel_sigma3.0_24D                   24       0.0000          nan        N/A DEGRADED  
+exp_power_beta1.0_24D                 24      16.6355      13.7610     2.8746 DEGRADED  
+twisted_t1.0_24D                      24       0.0000       0.3805     0.3805 OK        
+skew_normal_a5.0_24D                  24       0.0000      -7.8927     7.8927 DEGRADED  
+bimodal_w0.9_24D                      24       0.0000       0.0002     0.0002 OK        
+student_t_nu3.0_32D                   32       3.6916      -7.9475    11.6391 DEGRADED  
+student_t_cauchy_32D                  32     -10.3897         -inf        N/A DEGRADED  
+banana_b0.1_32D                       32      29.4060      29.3975     0.0086 OK        
+funnel_sigma3.0_32D                   32       0.0000          nan        N/A DEGRADED  
+exp_power_beta1.0_32D                 32      22.1807      19.7480     2.4327 DEGRADED  
+twisted_t1.0_32D                      32       0.0000       0.3818     0.3818 OK        
+skew_normal_a5.0_32D                  32       0.0000     -11.7633    11.7633 DEGRADED  
+bimodal_w0.9_32D                      32       0.0000       0.0002     0.0002 OK        
+student_t_nu3.0_48D                   48      -2.6697     -23.4209    20.7512 DEGRADED  
+student_t_cauchy_48D                  48     -25.1446     -25.1116     0.0330 OK        
+banana_b0.1_48D                       48      44.1090      44.1017     0.0074 OK        
+funnel_sigma3.0_48D                   48       0.0000          nan        N/A DEGRADED  
+exp_power_beta1.0_48D                 48      33.2711     -15.1979    48.4689 DEGRADED  
+twisted_t1.0_48D                      48       0.0000       0.3820     0.3820 OK        
+skew_normal_a5.0_48D                  48       0.0000     -17.5227    17.5227 DEGRADED  
+bimodal_w0.9_48D                      48       0.0000       0.0002     0.0002 OK        
+student_t_nu3.0_64D                   64     -11.6363     -40.3900    28.7538 DEGRADED  
+student_t_cauchy_64D                  64     -42.6175     -42.4883     0.1291 OK        
+banana_b0.1_64D                       64      58.8121      58.8059     0.0062 OK        
+funnel_sigma3.0_64D                   64       0.0000          nan        N/A DEGRADED  
+exp_power_beta1.0_64D                 64      44.3614      92.2818    47.9204 DEGRADED  
+twisted_t1.0_64D                      64       0.0000       0.3819     0.3819 OK        
+skew_normal_a5.0_64D                  64       0.0000     -22.3831    22.3831 DEGRADED  
+bimodal_w0.9_64D                      64       0.0000       0.0002     0.0002 OK        
+egg_box_omega5.0_2D                    2     236.3128     235.6159     0.6969 OK        
+==========================================================================================
+
+SUMMARY STATISTICS
+----------------------------------------
+Total runs:      75
+Successful:      75
+Failed:          0
+
+Error statistics (log units):
+  Mean:   8.0722
+  Median: 0.3818
+  Max:    162.7105
+  Min:    0.0000
+
+Error breakdown:
+  < 0.1 log units:   30 (excellent - Laplace-appropriate)
+  0.1 - 1.0:         13 (good - minor degradation)
+  1.0 - 10.0:        12 (degraded - significant error)
+  > 10.0:            12 (failed - Laplace inappropriate)
+
+==========================================================================================
+KEY FINDINGS FOR PAPER
+==========================================================================================
+
+Heavy tails: Laplace underestimates tail probability mass:
+  Avg error: 5.0074 log units
+  Max error: 28.7538 log units
+  Status:    ✗ FAILS
+
+Curved degeneracy: mode direction is nonlinear:
+  Avg error: 0.0297 log units
+  Max error: 0.0922 log units
+  Status:    ✓ PASSES
+
+Varying curvature: Hessian changes by exp(v):
+  Avg error: 1.1250 log units
+  Max error: 1.1250 log units
+  Status:    ⚠ DEGRADED
+
+Non-quadratic: |x|^1.0 != x^2:
+  Avg error: 12.8208 log units
+  Max error: 48.4689 log units
+  Status:    ✗ FAILS
+
+Non-quadratic: |x|^0.5 != x^2:
+  Avg error: 4.1671 log units
+  Max error: 7.1436 log units
+  Status:    ⚠ DEGRADED
+
+Saddle point: max probability at r=R but Hessian indefinite:
+  Avg error: 69.0520 log units
+  Max error: 162.7105 log units
+  Status:    ✗ FAILS
+
+Nonlinear correlation: sin(x) dependence:
+  Avg error: 0.3819 log units
+  Max error: 0.3823 log units
+  Status:    ✓ PASSES
+
+Asymmetry: mode != mean, Laplace misses heavy tail:
+  Avg error: 8.6554 log units
+  Max error: 22.3831 log units
+  Status:    ✗ FAILS
+
+Unequal weights: curvature-based weighting fails:
+  Avg error: 0.0002 log units
+  Max error: 0.0002 log units
+  Status:    ✓ PASSES
+
+Many modes: must find and weight all peaks correctly:
+  Avg error: 0.6969 log units
+  Max error: 0.6969 log units
+  Status:    ✓ PASSES
