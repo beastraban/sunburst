@@ -68,7 +68,7 @@ Tested on RTX 3080 Laptop GPU with `n_oscillations=1`:
 **TIMEOUT** = >600s (10 minutes)
 
 
-![SunBURST Scaling](assets/benchmark_scaling.png)
+![SunBURST Scaling](./assets/benchmark_scaling.png)
 
 *SunBURST completes in seconds where traditional methods timeout.*
 
