@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "SunBURST: GPU-accelerated Bayesian Evidence Calculation"
+version: 1.0.0
+date-released: 2026-01-26
+authors:
+  - family-names: Wolfson
+    given-names: Ira
+    email: ira.wolfson@braude.ac.il
+    affiliation: "Department of Electronics and Electrical Engineering, Braude College of Engineering, Israel"
+abstract: >-
+  SunBURST (Seeded Universe Navigation - Bayesian Unification via Radial Shooting Techniques)
+  is a GPU-accelerated Bayesian evidence calculator achieving machine-precision accuracy
+  through 1024 dimensions with sub-linear O(D^0.67) scaling.
+license: MIT
+repository-code: "https://github.com/sunburst-bayes/sunburst"
+keywords:
+  - bayesian
+  - evidence
+  - nested-sampling
+  - gpu
+  - cosmology
+  - parameter-estimation
