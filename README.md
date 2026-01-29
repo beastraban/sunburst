@@ -33,13 +33,12 @@ pip install cupy-cuda12x  # For CUDA 12.x
 ## Quick Start
 
 ```python
-import numpy as np
-from sunburst import compute_evidence
+from sunburst import compute_evidence, get_array_module
 
-# Define your log-likelihood (must handle batched inputs)
+# Define your log-likelihood (GPU-native, handles batched inputs)
 def log_likelihood(x):
-    x = np.atleast_2d(x)
-    return -0.5 * np.sum(x**2, axis=1)  # Gaussian
+    xp = get_array_module(x)  # CuPy if GPU, NumPy if CPU
+    return -0.5 * xp.sum(x**2, axis=1)  # Gaussian
 
 # Define parameter bounds
 dim = 64
@@ -51,6 +50,17 @@ result = compute_evidence(log_likelihood, bounds)
 print(f"log Z = {result.log_evidence:.4f} ± {result.log_evidence_std:.4f}")
 print(f"Peaks found: {result.n_peaks}")
 print(f"Time: {result.wall_time:.2f}s")
+```
+
+## Interactive GUI
+
+An interactive Streamlit demo is available:
+
+```bash
+git clone https://github.com/beastraban/sunburst.git
+cd sunburst
+pip install streamlit
+streamlit run app.py
 ```
 
 ## Performance Benchmarks
@@ -139,11 +149,12 @@ SunBURST uses a 4-stage pipeline, named after Guang Ping Yang Style Tai Chi form
 If you use SunBURST in your research, please cite:
 
 ```bibtex
-@software{sunburst,
-  author = {Wolfson, Ira},
-  title = {SunBURST: GPU-accelerated Bayesian Evidence Calculation},
-  year = {2026},
-  url = {https://github.com/beastraban/sunburst}
+@article{wolfson2026sunburst,
+    title={SunBURST: Deterministic GPU-Accelerated Bayesian Evidence 
+           via Mode-Centric Laplace Integration},
+    author={Wolfson, Ira},
+    journal={arXiv preprint arXiv:2601.19957},
+    year={2026}
 }
 ```
 
