@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SunBURST Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-dark: #1a1a2e;
+            --bg-card: #16213e;
+            --bg-lighter: #1f3460;
+            --accent: #e94560;
+            --accent-green: #4ade80;
+            --accent-blue: #60a5fa;
+            --accent-yellow: #fbbf24;
+            --accent-purple: #a78bfa;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--accent-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.connected {
+            background: var(--accent-green);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            grid-template-rows: auto 1fr;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid var(--border);
+        }
+        
+        .card-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        
+        /* Pipeline Status Card */
+        .pipeline-status {
+            grid-row: span 2;
+        }
+        
+        .module-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .module-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg-lighter);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .module-item.active {
+            background: linear-gradient(135deg, var(--accent), #ff6b8a);
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
+        }
+        
+        .module-item.completed {
+            opacity: 0.7;
+        }
+        
+        .module-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-dark);
+            font-size: 0.875rem;
+        }
+        
+        .module-item.active .module-icon {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .module-item.completed .module-icon {
+            background: var(--accent-green);
+            color: var(--bg-dark);
+        }
+        
+        .module-info {
+            flex: 1;
+        }
+        
+        .module-name {
+            font-weight: 600;
+            font-size: 0.9375rem;
+        }
+        
+        .module-detail {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .module-item.active .module-detail {
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .module-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Stats */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Visualization Canvas */
+        .visualization {
+            position: relative;
+            min-height: 300px;
+        }
+        
+        #canvas-container {
+            width: 100%;
+            height: 300px;
+            background: var(--bg-dark);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #viz-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .viz-legend {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.75rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .legend-dot.rays { background: var(--accent-blue); opacity: 0.5; }
+        .legend-dot.peaks { background: var(--accent); }
+        .legend-dot.bounds { border: 2px solid var(--accent-yellow); }
+        
+        /* Run History */
+        .history {
+            grid-column: span 2;
+        }
+        
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            display: grid;
+            grid-template-columns: 2rem 1fr 8rem 5rem 5rem 3rem;
+            gap: 1rem;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
+        
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        
+        .history-item:hover {
+            background: var(--bg-lighter);
+        }
+        
+        .history-num {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .history-name {
+            font-weight: 500;
+        }
+        
+        .history-evidence {
+            font-family: 'SF Mono', Monaco, monospace;
+            color: var(--accent-green);
+        }
+        
+        .history-peaks {
+            color: var(--accent-purple);
+        }
+        
+        .history-time {
+            color: var(--text-secondary);
+        }
+        
+        .history-status {
+            text-align: center;
+        }
+        
+        .status-icon.success { color: var(--accent-green); }
+        .status-icon.error { color: var(--accent); }
+        .status-icon.running { color: var(--accent-yellow); animation: pulse 1s infinite; }
+        
+        /* Current Run Info */
+        .current-run {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--bg-lighter), var(--bg-card));
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .run-dim {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-yellow);
+        }
+        
+        .run-dim span {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+        
+        .run-info {
+            flex: 1;
+        }
+        
+        .run-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .run-id {
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.875rem;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 1rem;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: var(--bg-dark);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-yellow));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pipeline-status {
+                grid-row: auto;
+            }
+            
+            .history {
+                grid-column: auto;
+            }
+            
+            .history-item {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>☀️ SunBURST Dashboard</h1>
+            <p class="subtitle">Real-time Bayesian Evidence Monitoring</p>
+        </div>
+        <div class="connection-status">
+            <div class="status-dot" id="status-dot"></div>
+            <span id="status-text">Connecting...</span>
+        </div>
+    </div>
+    
+    <div class="grid">
+        <!-- Pipeline Status -->
+        <div class="card pipeline-status">
+            <h2 class="card-title">Pipeline Status</h2>
+            
+            <div class="current-run" id="current-run" style="display: none;">
+                <div class="run-dim"><span id="run-dim">--</span><span>D</span></div>
+                <div class="run-info">
+                    <div class="run-label">Run ID</div>
+                    <div class="run-id" id="run-id">--</div>
+                </div>
+            </div>
+            
+            <div class="module-list">
+                <div class="module-item" id="module-precheck">
+                    <div class="module-icon">🔍</div>
+                    <div class="module-info">
+                        <div class="module-name">PreCheck</div>
+                        <div class="module-detail">Dimensional analysis</div>
+                    </div>
+                    <div class="module-time" id="time-precheck">--</div>
+                </div>
+                
+                <div class="module-item" id="module-carrytiger">
+                    <div class="module-icon">🐯</div>
+                    <div class="module-info">
+                        <div class="module-name">CarryTiger</div>
+                        <div class="module-detail">Mode detection</div>
+                    </div>
+                    <div class="module-time" id="time-carrytiger">--</div>
+                </div>
+                
+                <div class="module-item" id="module-greendragon">
+                    <div class="module-icon">🐉</div>
+                    <div class="module-info">
+                        <div class="module-name">GreenDragon</div>
+                        <div class="module-detail">Peak refinement</div>
+                    </div>
+                    <div class="module-time" id="time-greendragon">--</div>
+                </div>
+                
+                <div class="module-item" id="module-bendthebow">
+                    <div class="module-icon">🏹</div>
+                    <div class="module-info">
+                        <div class="module-name">BendTheBow</div>
+                        <div class="module-detail">Evidence calculation</div>
+                    </div>
+                    <div class="module-time" id="time-bendthebow">--</div>
+                </div>
+            </div>
+            
+            <div class="progress-container" id="progress-container" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progress-label">Processing...</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+            </div>
+            
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat-value" id="stat-peaks">--</div>
+                    <div class="stat-label">Peaks</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="stat-rays">--</div>
+                    <div class="stat-label">Rays</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="stat-evals">--</div>
+                    <div class="stat-label">Evals</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Visualization -->
+        <div class="card visualization">
+            <h2 class="card-title">2D Projection</h2>
+            <div id="canvas-container">
+                <canvas id="viz-canvas"></canvas>
+            </div>
+            <div class="viz-legend">
+                <div class="legend-item">
+                    <div class="legend-dot rays"></div>
+                    <span>Ray samples</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot peaks"></div>
+                    <span>Detected peaks</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot bounds"></div>
+                    <span>Prior bounds</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- History -->
+        <div class="card history">
+            <h2 class="card-title">Run History</h2>
+            <div class="history-list" id="history-list">
+                <div class="empty-state" id="empty-state">
+                    <div class="empty-state-icon">📊</div>
+                    <h3>No runs yet</h3>
+                    <p>Run SunBURST with dashboard enabled to see results here</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const WS_URL = 'ws://localhost:8765';
+        
+        // State
+        let ws = null;
+        let reconnectAttempts = 0;
+        let currentRun = null;
+        let runHistory = [];
+        let raySamples = [];
+        let peaks = [];
+        let bounds = null;
+        
+        // DOM elements
+        const statusDot = document.getElementById('status-dot');
+        const statusText = document.getElementById('status-text');
+        const currentRunEl = document.getElementById('current-run');
+        const runDimEl = document.getElementById('run-dim');
+        const runIdEl = document.getElementById('run-id');
+        const progressContainer = document.getElementById('progress-container');
+        const progressFill = document.getElementById('progress-fill');
+        const progressLabel = document.getElementById('progress-label');
+        const progressPercent = document.getElementById('progress-percent');
+        const historyList = document.getElementById('history-list');
+        const emptyState = document.getElementById('empty-state');
+        const canvas = document.getElementById('viz-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Module elements
+        const modules = {
+            precheck: document.getElementById('module-precheck'),
+            carrytiger: document.getElementById('module-carrytiger'),
+            greendragon: document.getElementById('module-greendragon'),
+            bendthebow: document.getElementById('module-bendthebow')
+        };
+        
+        const moduleTimes = {
+            precheck: document.getElementById('time-precheck'),
+            carrytiger: document.getElementById('time-carrytiger'),
+            greendragon: document.getElementById('time-greendragon'),
+            bendthebow: document.getElementById('time-bendthebow')
+        };
+        
+        // Stats elements
+        const statPeaks = document.getElementById('stat-peaks');
+        const statRays = document.getElementById('stat-rays');
+        const statEvals = document.getElementById('stat-evals');
+        
+        // WebSocket connection
+        function connect() {
+            ws = new WebSocket(WS_URL);
+            
+            ws.onopen = () => {
+                console.log('Connected to SunBURST Dashboard');
+                statusDot.classList.add('connected');
+                statusText.textContent = 'Connected';
+                reconnectAttempts = 0;
+            };
+            
+            ws.onclose = () => {
+                statusDot.classList.remove('connected');
+                statusText.textContent = 'Disconnected';
+                
+                // Reconnect with backoff
+                const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000);
+                reconnectAttempts++;
+                setTimeout(connect, delay);
+            };
+            
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+            
+            ws.onmessage = (event) => {
+                try {
+                    const message = JSON.parse(event.data);
+                    handleMessage(message);
+                } catch (e) {
+                    console.error('Failed to parse message:', e);
+                }
+            };
+        }
+        
+        // Message handlers
+        function handleMessage(msg) {
+            const { type, data } = msg;
+            
+            switch (type) {
+                case 'pipeline_start':
+                    handlePipelineStart(data);
+                    break;
+                case 'pipeline_end':
+                    handlePipelineEnd(data);
+                    break;
+                case 'module_start':
+                    handleModuleStart(data);
+                    break;
+                case 'module_end':
+                    handleModuleEnd(data);
+                    break;
+                case 'progress':
+                    handleProgress(data);
+                    break;
+                case 'rays_update':
+                    handleRaysUpdate(data);
+                    break;
+                case 'peaks_update':
+                    handlePeaksUpdate(data);
+                    break;
+                case 'result':
+                    handleResult(data);
+                    break;
+                case 'history':
+                    handleHistory(data);
+                    break;
+                case 'error':
+                    handleError(data);
+                    break;
+            }
+        }
+        
+        function handlePipelineStart(data) {
+            currentRun = data;
+            raySamples = [];
+            peaks = [];
+            bounds = data.bounds;
+            
+            // Show current run
+            currentRunEl.style.display = 'flex';
+            runDimEl.textContent = data.dim || '--';
+            runIdEl.textContent = data.run_id || '--';
+            
+            // Reset modules
+            Object.values(modules).forEach(m => {
+                m.classList.remove('active', 'completed');
+            });
+            Object.values(moduleTimes).forEach(t => {
+                t.textContent = '--';
+            });
+            
+            // Reset stats
+            statPeaks.textContent = '--';
+            statRays.textContent = '--';
+            statEvals.textContent = '--';
+            
+            // Clear canvas
+            drawVisualization();
+        }
+        
+        function handlePipelineEnd(data) {
+            currentRun = null;
+            progressContainer.style.display = 'none';
+        }
+        
+        function handleModuleStart(data) {
+            const moduleName = data.module.toLowerCase().replace(/[^a-z]/g, '');
+            const moduleEl = modules[moduleName];
+            
+            if (moduleEl) {
+                // Deactivate all, activate current
+                Object.values(modules).forEach(m => m.classList.remove('active'));
+                moduleEl.classList.add('active');
+            }
+            
+            // Show progress
+            progressContainer.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressLabel.textContent = `Running ${data.module}...`;
+            progressPercent.textContent = '0%';
+        }
+        
+        function handleModuleEnd(data) {
+            const moduleName = data.module.toLowerCase().replace(/[^a-z]/g, '');
+            const moduleEl = modules[moduleName];
+            const timeEl = moduleTimes[moduleName];
+            
+            if (moduleEl) {
+                moduleEl.classList.remove('active');
+                moduleEl.classList.add('completed');
+            }
+            
+            if (timeEl && data.time !== undefined) {
+                timeEl.textContent = formatTime(data.time);
+            }
+        }
+        
+        function handleProgress(data) {
+            if (data.percent !== undefined) {
+                progressFill.style.width = `${data.percent}%`;
+                progressPercent.textContent = `${Math.round(data.percent)}%`;
+            }
+            if (data.label) {
+                progressLabel.textContent = data.label;
+            }
+            if (data.evals !== undefined) {
+                statEvals.textContent = formatNumber(data.evals);
+            }
+        }
+        
+        function handleRaysUpdate(data) {
+            statRays.textContent = `${data.rays_cast}/${data.total_rays}`;
+            
+            if (data.samples) {
+                raySamples = data.samples;
+                drawVisualization();
+            }
+            
+            // Update progress
+            const percent = (data.rays_cast / data.total_rays) * 100;
+            progressFill.style.width = `${percent}%`;
+            progressPercent.textContent = `${Math.round(percent)}%`;
+        }
+        
+        function handlePeaksUpdate(data) {
+            statPeaks.textContent = data.n_peaks;
+            
+            if (data.peaks_2d) {
+                peaks = data.peaks_2d;
+                drawVisualization();
+            }
+        }
+        
+        function handleResult(data) {
+            // Add to history
+            runHistory.unshift(data);
+            if (runHistory.length > 20) runHistory.pop();
+            
+            renderHistory();
+            
+            // Update final stats
+            statPeaks.textContent = data.n_peaks;
+            
+            // Mark all modules as complete
+            Object.values(modules).forEach(m => {
+                m.classList.remove('active');
+                m.classList.add('completed');
+            });
+            
+            progressContainer.style.display = 'none';
+        }
+        
+        function handleHistory(data) {
+            if (data.runs) {
+                runHistory = data.runs;
+                renderHistory();
+            }
+        }
+        
+        function handleError(data) {
+            console.error('SunBURST Error:', data.error);
+            // Could show a toast notification here
+        }
+        
+        // Render history list
+        function renderHistory() {
+            if (runHistory.length === 0) {
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            let html = '';
+            runHistory.forEach((run, i) => {
+                const logZ = run.log_evidence !== undefined ? run.log_evidence.toFixed(2) : '--';
+                const status = run.error ? 'error' : 'success';
+                const statusIcon = run.error ? '❌' : '✓';
+                
+                html += `
+                    <div class="history-item">
+                        <div class="history-num">#${runHistory.length - i}</div>
+                        <div class="history-name">${run.run_id || 'Unknown'}</div>
+                        <div class="history-evidence">log Z = ${logZ}</div>
+                        <div class="history-peaks">${run.n_peaks || '--'} peaks</div>
+                        <div class="history-time">${formatTime(run.time)}</div>
+                        <div class="history-status">
+                            <span class="status-icon ${status}">${statusIcon}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            historyList.innerHTML = html;
+        }
+        
+        // Canvas visualization
+        function resizeCanvas() {
+            const container = document.getElementById('canvas-container');
+            const rect = container.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            drawVisualization();
+        }
+        
+        function drawVisualization() {
+            const width = canvas.width / window.devicePixelRatio;
+            const height = canvas.height / window.devicePixelRatio;
+            
+            // Clear
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Determine bounds for scaling
+            let minX = -10, maxX = 10, minY = -10, maxY = 10;
+            
+            if (bounds && bounds.length >= 2) {
+                minX = bounds[0][0];
+                maxX = bounds[0][1];
+                minY = bounds[1][0];
+                maxY = bounds[1][1];
+            }
+            
+            const padding = 30;
+            const scaleX = (width - 2 * padding) / (maxX - minX);
+            const scaleY = (height - 2 * padding) / (maxY - minY);
+            
+            function toCanvasX(x) {
+                return padding + (x - minX) * scaleX;
+            }
+            
+            function toCanvasY(y) {
+                return height - padding - (y - minY) * scaleY;
+            }
+            
+            // Draw bounds rectangle
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.strokeRect(
+                toCanvasX(minX),
+                toCanvasY(maxY),
+                (maxX - minX) * scaleX,
+                (maxY - minY) * scaleY
+            );
+            ctx.setLineDash([]);
+            
+            // Draw axes
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(toCanvasX(minX), toCanvasY(0));
+            ctx.lineTo(toCanvasX(maxX), toCanvasY(0));
+            ctx.moveTo(toCanvasX(0), toCanvasY(minY));
+            ctx.lineTo(toCanvasX(0), toCanvasY(maxY));
+            ctx.stroke();
+            
+            // Draw ray samples
+            if (raySamples.length > 0) {
+                ctx.fillStyle = 'rgba(96, 165, 250, 0.3)';
+                raySamples.forEach(sample => {
+                    if (sample.length >= 2) {
+                        ctx.beginPath();
+                        ctx.arc(toCanvasX(sample[0]), toCanvasY(sample[1]), 2, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                });
+            }
+            
+            // Draw peaks
+            if (peaks.length > 0) {
+                ctx.fillStyle = '#e94560';
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                peaks.forEach(peak => {
+                    if (peak.length >= 2) {
+                        ctx.beginPath();
+                        ctx.arc(toCanvasX(peak[0]), toCanvasY(peak[1]), 8, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.stroke();
+                    }
+                });
+            }
+            
+            // Labels
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px -apple-system, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(`θ₁`, width / 2, height - 8);
+            
+            ctx.save();
+            ctx.translate(12, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText(`θ₂`, 0, 0);
+            ctx.restore();
+        }
+        
+        // Utility functions
+        function formatTime(seconds) {
+            if (seconds === undefined || seconds === null) return '--';
+            if (seconds < 0.01) return '<0.01s';
+            if (seconds < 1) return `${(seconds * 1000).toFixed(0)}ms`;
+            if (seconds < 60) return `${seconds.toFixed(2)}s`;
+            return `${(seconds / 60).toFixed(1)}m`;
+        }
+        
+        function formatNumber(n) {
+            if (n === undefined || n === null) return '--';
+            if (n < 1000) return n.toString();
+            if (n < 1000000) return `${(n / 1000).toFixed(1)}k`;
+            return `${(n / 1000000).toFixed(1)}M`;
+        }
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            resizeCanvas();
+            connect();
+        });
+        
+        window.addEventListener('resize', resizeCanvas);
+    </script>
+</body>
+</html>
