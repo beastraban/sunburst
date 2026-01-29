@@ -58,7 +58,7 @@ An interactive Streamlit demo is available:
 
 ```bash
 git clone https://github.com/beastraban/sunburst.git
-cd sunburst
+cd sunburst/sunburst_super_gui
 pip install streamlit
 streamlit run app.py
 ```
