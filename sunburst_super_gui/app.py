@@ -549,7 +549,10 @@ def create_likelihood_surface(log_likelihood, bounds: np.ndarray,
         title='Likelihood Surface (first 2 dimensions)',
         xaxis_title='θ₁',
         yaxis_title='θ₂',
-        height=500
+        xaxis=dict(range=[bounds[0, 0], bounds[0, 1]]),
+        yaxis=dict(range=[bounds[1, 0] if d > 1 else -1, bounds[1, 1] if d > 1 else 1]),
+        width=900,
+        height=900
     )
     
     return fig
@@ -581,6 +584,9 @@ def create_corner_plot(result: SunBURSTResult, n_samples: int = 5000) -> Optiona
     
     samples = np.vstack(samples_list)
     
+    # Number of bins = sqrt(N)
+    n_bins = int(np.sqrt(len(samples)))
+    
     # Create corner plot
     fig = make_subplots(
         rows=d, cols=d,
@@ -593,14 +599,40 @@ def create_corner_plot(result: SunBURSTResult, n_samples: int = 5000) -> Optiona
     for i in range(d):
         for j in range(d):
             if i == j:
+                # Compute histogram manually to get exact scaling
+                hist_counts, bin_edges = np.histogram(samples[:, i], bins=n_bins)
+                bin_centers = 0.5 * (bin_edges[:-1] + bin_edges[1:])
+                bin_width = bin_edges[1] - bin_edges[0]
+                
                 # Diagonal: 1D histogram
                 fig.add_trace(
-                    go.Histogram(
-                        x=samples[:, i],
-                        nbinsx=30,
+                    go.Bar(
+                        x=bin_centers,
+                        y=hist_counts,
+                        width=bin_width * 0.9,
                         marker_color=colors[0],
                         showlegend=False,
-                        opacity=0.7
+                        opacity=0.7,
+                        name=f'θ_{i+1}'
+                    ),
+                    row=i+1, col=j+1
+                )
+                
+                # Add Gaussian fit (red line) - properly scaled
+                mu = np.mean(samples[:, i])
+                sigma = np.std(samples[:, i])
+                x_fit = np.linspace(bin_edges[0], bin_edges[-1], 200)
+                # Scale: N * bin_width * pdf = expected counts
+                y_fit = len(samples) * bin_width * stats.norm.pdf(x_fit, mu, sigma)
+                
+                fig.add_trace(
+                    go.Scatter(
+                        x=x_fit,
+                        y=y_fit,
+                        mode='lines',
+                        line=dict(color='red', width=2),
+                        showlegend=False,
+                        name='Gaussian fit'
                     ),
                     row=i+1, col=j+1
                 )
@@ -624,16 +656,22 @@ def create_corner_plot(result: SunBURSTResult, n_samples: int = 5000) -> Optiona
                 # Upper triangle: empty
                 pass
     
-    # Update layout
+    # Update layout - larger and fill space
+    plot_size = 180 * d
     fig.update_layout(
         title='Corner Plot (Laplace Approximation)',
-        height=150 * d,
-        width=150 * d,
+        height=plot_size,
+        width=plot_size,
         showlegend=False
     )
     
-    # Update axes labels
+    # Update axes - equal aspect ratio for 2D plots and fill space
     for i in range(d):
+        for j in range(d):
+            if i > j:
+                # 2D plots: equal axes
+                fig.update_xaxes(scaleanchor=f"y{i*d+j+1}" if i > 0 or j > 0 else "y", 
+                                 scaleratio=1, row=i+1, col=j+1)
         fig.update_xaxes(title_text=f'θ_{i+1}' if i == d-1 else '', row=d, col=i+1)
         fig.update_yaxes(title_text=f'θ_{i+1}' if i > 0 else '', row=i+1, col=1)
     
@@ -976,7 +1014,7 @@ def main():
                     else:
                         plot_bounds = bounds
                     fig = create_likelihood_surface(log_L, plot_bounds, result.peaks)
-                    st.plotly_chart(fig, use_container_width=True)
+                    st.plotly_chart(fig, use_container_width=False)
                 
                 with tab2:
                     fig = create_timing_chart(result)
@@ -1216,7 +1254,7 @@ def main():
         ### Links
         
         - [GitHub](https://github.com/beastraban/sunburst)
-        - [arXiv Paper](https://arxiv.org/abs/...)
+        - [arXiv Paper](https://arxiv.org/abs/2601.19957)
         
         ---
         
