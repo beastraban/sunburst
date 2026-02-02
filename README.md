@@ -1,5 +1,6 @@
 # SunBURST
 
+[![arXiv](https://img.shields.io/badge/arXiv-2601.19957-b31b1b.svg)](https://arxiv.org/abs/2601.19957)
 [![PyPI version](https://badge.fury.io/py/sunburst-bayes.svg)](https://badge.fury.io/py/sunburst-bayes)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -52,6 +53,26 @@ print(f"Peaks found: {result.n_peaks}")
 print(f"Time: {result.wall_time:.2f}s")
 ```
 
+Expected output (RTX 3080, 64D Gaussian):
+```
+log Z = -91.8939 ± 0.0001
+Peaks found: 1
+Time: 0.71s
+```
+
+The true value is `log Z = -91.8939` for a 64D unit Gaussian on [-10, 10]^64. SunBURST recovers it to machine precision in under a second.
+
+## When Not to Use SunBURST
+
+SunBURST works best on posteriors that are approximately Gaussian near their peaks. It is **not the right tool** when:
+
+- **Heavy-tailed posteriors** (e.g. Student-t with low ν). The Laplace approximation underestimates probability mass in the tails. Errors can exceed 100%.
+- **Highly curved or banana-shaped** posteriors where the Hessian at the peak misrepresents the global geometry.
+- **Ring/shell distributions** (e.g. donut posteriors) where probability mass concentrates far from any peak.
+- **You need posterior samples**, not evidence. SunBURST computes log Z; it does not produce MCMC-like samples. Use dynesty or PolyChord if you need the posterior itself.
+
+For these cases, traditional nested samplers remain more reliable. See Table 4 in the [paper](https://arxiv.org/abs/2601.19957) for detailed failure-mode benchmarks.
+
 ## Interactive GUI
 
 An interactive Streamlit demo is available:
@@ -69,8 +90,8 @@ Tested on RTX 3080 Laptop GPU with `n_oscillations=1`:
 
 | Dimension | SunBURST | dynesty | UltraNest | Speedup |
 |-----------|----------|---------|-----------|---------|
-| 2D        | 0.39s    | 0.61s   | 0.87s     | 1.6-2.2× |
-| 8D        | 0.42s    | 37s     | 54s       | 88-129× |
+| 2D        | 0.39s    | 0.61s   | 0.87s     | 1.6–2.2× |
+| 8D        | 0.42s    | 37s     | 54s       | 88–129× |
 | 64D       | 0.71s    | TIMEOUT | TIMEOUT   | >1200× |
 | 256D      | 2.72s    | —       | —         | ∞ |
 | 1024D     | 14.0s    | —       | —         | ∞ |
