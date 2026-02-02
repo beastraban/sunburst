@@ -190,4 +190,3 @@ Contributions welcome! Please see our [contributing guidelines](CONTRIBUTING.md)
 ## Acknowledgments
 
 Module names honor Master Donald Rubbo and the Guang Ping Yang Style Tai Chi (廣平楊式太極拳) tradition.
-1
