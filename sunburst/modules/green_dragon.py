@@ -177,6 +177,9 @@ class GreenDragonRisesFromWater:
         maxiter: int = 100,
         convergence_tol: float = 1e-6,
         dedup_tolerance: float = 0.01,
+        grad_threshold: float = 1e-3,
+        saddle_threshold: float = 1e-4,
+        fd_eps: float = 1e-4,
         verbose: bool = True
     ):
         """
@@ -192,6 +195,9 @@ class GreenDragonRisesFromWater:
             maxiter: Maximum L-BFGS iterations
             convergence_tol: Gradient tolerance for convergence
             dedup_tolerance: L∞ tolerance for deduplication
+            grad_threshold: Gradient norm threshold for filtering non-stationary points
+            saddle_threshold: Hessian threshold for saddle point detection (diag_H < threshold)
+            fd_eps: Finite difference step size for Hessian (fast mode only)
             verbose: Print progress
         """
         self.func = func
@@ -212,6 +218,9 @@ class GreenDragonRisesFromWater:
         self.maxiter = maxiter
         self.convergence_tol = convergence_tol
         self.dedup_tolerance = dedup_tolerance
+        self.grad_threshold = grad_threshold
+        self.saddle_threshold = saddle_threshold
+        self.fd_eps = fd_eps
         self.verbose = verbose
     
     def refine(
@@ -278,6 +287,8 @@ class GreenDragonRisesFromWater:
         timing = {}
         
         if K == 0:
+            if self.verbose:
+                print(f"\n  WARNING: Received 0 peaks - nothing to refine")
             return self._empty_result(D, return_bank)
         
         # Dispatch to appropriate method
@@ -575,7 +586,7 @@ class GreenDragonRisesFromWater:
         # For a maximum, all diag_H should be negative (concave down).
         # If any diag_H > 0, that peak is a saddle point.
         # -----------------------------------------------------------------
-        saddle_threshold = 1e-6  # Small positive tolerance for numerical noise
+        saddle_threshold = self.saddle_threshold
         is_maximum = xp.all(diag_H < saddle_threshold, axis=1)  # (K,)
         n_saddles = int(xp.sum(~is_maximum))
         
@@ -602,7 +613,7 @@ class GreenDragonRisesFromWater:
         # Stage 4c: Gradient Filter (true maxima have zero gradient)
         # Uses FREE gradient norm from L-BFGS - no extra function evaluations!
         # -----------------------------------------------------------------
-        grad_threshold = 1e-4  # Tolerance for "zero" gradient
+        grad_threshold = self.grad_threshold
         is_stationary = grad_norm_refined < grad_threshold
         n_not_stationary = int(xp.sum(~is_stationary))
         
@@ -715,7 +726,7 @@ class GreenDragonRisesFromWater:
         K, D = peaks.shape
         n_seeds = self.n_seeds_per_peak
         r = min(self.low_rank_r, D)
-        eps = 1e-5
+        eps = self.fd_eps
         
         # Use scalar width (first dimension or mean)
         width_scalar = widths_per_dim[:, 0]  # (K,)
@@ -841,7 +852,7 @@ class GreenDragonRisesFromWater:
         # For a maximum, all diag_H should be negative (concave down).
         # If any diag_H > 0, that peak is a saddle point.
         # -----------------------------------------------------------------
-        saddle_threshold = 1e-6  # Small positive tolerance for numerical noise
+        saddle_threshold = self.saddle_threshold
         is_maximum = xp.all(diag_H < saddle_threshold, axis=1)  # (K,)
         n_saddles = int(xp.sum(~is_maximum))
         
@@ -870,7 +881,7 @@ class GreenDragonRisesFromWater:
         # Stage 4c: Gradient Filter (true maxima have zero gradient)
         # Uses FREE gradient norm from L-BFGS - no extra function evaluations!
         # -----------------------------------------------------------------
-        grad_threshold = 1e-4  # Tolerance for "zero" gradient
+        grad_threshold = self.grad_threshold
         is_stationary = grad_norm_refined < grad_threshold
         n_not_stationary = int(xp.sum(~is_stationary))
         
@@ -989,6 +1000,10 @@ def refine_peaks(
         return_bank: Include TrajectoryBank in results
         verbose: Print progress
         **kwargs: Additional arguments to GreenDragonRisesFromWater
+            Key parameters for noisy emulators (e.g., cosmopower-jax):
+            - grad_threshold (default 1e-3): Gradient norm threshold
+            - saddle_threshold (default 1e-4): Hessian threshold for saddle detection  
+            - fd_eps (default 1e-4): Finite difference step (fast mode only)
         
     Returns:
         Dictionary with refined peaks, Hessian approximation, timing

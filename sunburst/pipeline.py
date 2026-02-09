@@ -83,6 +83,11 @@ class SunburstResult:
     L_peaks: Optional[np.ndarray] = None
     widths: Optional[np.ndarray] = None
     diag_H: Optional[np.ndarray] = None
+    
+    # BendTheBow internals (for posterior analysis)
+    hessians_full: Optional[List[np.ndarray]] = None  # Per-peak: 1D diag or 2D full Hessian
+    diagnostics: Optional[List[Dict]] = None           # Per-peak: tail_alpha, curvature, asymmetry
+    sunburst_rays: Optional[List[Dict]] = None         # Per-peak: directions, t_values, log_L, crossings
 
 
 def compute_evidence(
@@ -94,6 +99,11 @@ def compute_evidence(
     verbose: bool = False,
     seed: Optional[int] = None,
     use_gpu: Optional[bool] = None,
+    # Noise tolerance parameters for emulators
+    stick_tolerance: float = 1e-3,
+    grad_threshold: float = 1e-3,
+    saddle_threshold: float = 1e-4,
+    fd_eps: float = 1e-4,
 ) -> SunburstResult:
     """
     Compute Bayesian evidence for a likelihood function.
@@ -124,6 +134,18 @@ def compute_evidence(
         Random seed for reproducibility.
     use_gpu : bool, optional
         Force GPU (True), CPU (False), or auto-detect (None).
+    stick_tolerance : float, default=1e-3
+        ChiSao gradient/deduplication tolerance. For noisy emulators with
+        noise level σ, use 5-10× σ. Was 1e-6 (too strict for noisy functions).
+    grad_threshold : float, default=1e-3
+        GreenDragon gradient magnitude threshold for filtering non-stationary
+        points. For noisy functions with σ ~ 1e-4, use ~1e-3.
+    saddle_threshold : float, default=1e-4
+        GreenDragon Hessian threshold for saddle point detection. Points with
+        any diag_H > threshold are filtered as saddles.
+    fd_eps : float, default=1e-4
+        GreenDragon finite difference step size (fast mode only). For functions
+        with noise σ, optimal eps ~ σ to balance truncation and roundoff error.
     
     Returns
     -------
@@ -201,6 +223,7 @@ def compute_evidence(
         bounds=bounds_arr,
         use_gpu=use_gpu,
         n_oscillations=n_oscillations,
+        stick_tolerance=stick_tolerance,
     )
     
     peaks, L_peaks, widths, ray_bank, chisao_bank = tiger.detect_modes(
@@ -215,6 +238,17 @@ def compute_evidence(
         print(f"  → Found {n_peaks} peaks in {module_times['carry_tiger']:.2f}s")
     
     if n_peaks == 0:
+        if verbose:
+            print("\n" + "="*70)
+            print("WARNING: No peaks found - cannot compute evidence")
+            print("="*70)
+            print("Suggestions:")
+            print("  1. Try larger stick_tolerance (current: {:.2e})".format(stick_tolerance))
+            print("  2. Use assess_noise() to automatically determine thresholds")
+            print("  3. Check that likelihood function has a clear maximum")
+            print("  4. Try more oscillations (current: {})".format(n_oscillations))
+            print("="*70)
+        
         return SunburstResult(
             log_evidence=np.nan,
             log_evidence_std=np.nan,
@@ -239,6 +273,9 @@ def compute_evidence(
         bounds=bounds_arr,
         use_gpu=use_gpu,
         fast=fast,
+        grad_threshold=grad_threshold,
+        saddle_threshold=saddle_threshold,
+        fd_eps=fd_eps,
     )
     
     dragon_result = dragon.refine(
@@ -316,9 +353,42 @@ def compute_evidence(
     
     # Prepare Hessians list if requested
     hessians = None
-    if return_peaks and diag_H is not None:
-        diag_H_cpu = to_cpu(diag_H)
-        hessians = [np.diag(diag_H_cpu[i]) for i in range(len(diag_H_cpu))]
+    hessians_full = None
+    diagnostics_list = None
+    sunburst_rays = None
+    
+    peak_results = evidence_result.get('peak_results', [])
+    
+    if return_peaks and peak_results:
+        # Legacy: diagonal Hessian as (D, D) matrices
+        if diag_H is not None:
+            diag_H_cpu = to_cpu(diag_H)
+            hessians = [np.diag(diag_H_cpu[i]) for i in range(len(diag_H_cpu))]
+        
+        # New: actual Hessians from BendTheBow (may be full 2D when rotation detected)
+        hessians_full = []
+        diagnostics_list = []
+        sunburst_rays = []
+        
+        for pr in peak_results:
+            # Hessian: 1D diagonal or 2D full — whatever BendTheBow used
+            H = pr.get('hessian')
+            if H is not None:
+                hessians_full.append(to_cpu(np.asarray(H)))
+            else:
+                hessians_full.append(None)
+            
+            # Diagnostics: tail_alpha, curvature, asymmetry
+            diagnostics_list.append(pr.get('diagnostics', {}))
+            
+            # Sunburst ray profiles (for non-Gaussian contours)
+            ray_data = {}
+            for key in ('sunburst_directions', 'sunburst_t_values',
+                        'sunburst_log_L', 'crossings'):
+                val = pr.get(key)
+                if val is not None:
+                    ray_data[key] = to_cpu(np.asarray(val))
+            sunburst_rays.append(ray_data if ray_data else None)
     
     return SunburstResult(
         log_evidence=float(log_Z),
@@ -340,6 +410,9 @@ def compute_evidence(
         L_peaks=to_cpu(refined_L),
         widths=to_cpu(widths) if widths is not None else None,
         diag_H=to_cpu(diag_H),
+        hessians_full=hessians_full,
+        diagnostics=diagnostics_list,
+        sunburst_rays=sunburst_rays,
     )
 
 

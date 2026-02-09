@@ -1677,6 +1677,11 @@ class BendTheBowShootTheTiger:
                 'peak_idx': k,
                 'log_Z': log_Z_k,
                 'diagnostics': diagnostics,
+                'hessian': H_diag,  # 1D diagonal OR 2D full — whatever was used
+                'sunburst_directions': to_cpu(directions),  # (n_rays, D)
+                'sunburst_t_values': to_cpu(t_values),      # (n_rays, n_samples)
+                'sunburst_log_L': log_L_rays,               # (n_rays, n_samples)
+                'crossings': crossings,                     # (n_rays, n_levels)
                 'n_evals_sunburst': n_evals_sunburst,
                 'n_evals_bisect': int(n_evals_bisect),
                 'time_total': time.time() - t_start,

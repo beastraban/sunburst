@@ -282,7 +282,8 @@ class CarryTigerToMountain:
         multi_scale: bool = False,  # NEW v1.7: Two-phase detection for Ackley-type
         func_returns_grad: bool = False,  # NEW v3.1: Analytic gradient support
         line_search: str = 'armijo',  # NEW v3.2: 'armijo' (safe) or 'fixed' (fast)
-        n_oscillations: int = 3  # NEW v2.2: ChiSao oscillation cycles (was hardcoded to 1)
+        n_oscillations: int = 3,  # NEW v2.2: ChiSao oscillation cycles (was hardcoded to 1)
+        stick_tolerance: float = 1e-3  # NEW: ChiSao gradient/dedup tolerance (was 1e-6)
     ):
         self.func = func
         self.bounds = xp.array(bounds) if use_gpu else np.array(bounds)
@@ -303,6 +304,7 @@ class CarryTigerToMountain:
         self.func_returns_grad = func_returns_grad  # NEW v3.1
         self.line_search = line_search  # NEW v3.2
         self.n_oscillations = n_oscillations  # NEW v2.2
+        self.stick_tolerance = stick_tolerance  # NEW: Configurable gradient tolerance
         
         # Create a likelihood-only wrapper for places that don't need gradients
         if func_returns_grad:
@@ -325,7 +327,7 @@ class CarryTigerToMountain:
             'reseed_strategy': 'sunburst',  # Repulse Monkey enabled
             'cannon_through_sky': True,
             'estimate_widths': True,
-            'stick_tolerance': 1e-6,  # Default dedup tolerance
+            'stick_tolerance': self.stick_tolerance,  # Now configurable for noisy functions
             'bounds': self.bounds  # PURE GPU: CuPy array
         }
     
@@ -444,9 +446,16 @@ class CarryTigerToMountain:
         if verbose:
             print(f"\n[CarryTiger v2.2: Complete]")
             print(f"  Found {len(peaks)} peaks")
-            print(f"  Peak likelihood range: [{xp.min(L_peaks):.2f}, {xp.max(L_peaks):.2f}]")
-            if len(widths) > 0:
-                print(f"  Width range: [{xp.min(widths):.4f}, {xp.max(widths):.4f}]")
+            if len(peaks) > 0:
+                print(f"  Peak likelihood range: [{xp.min(L_peaks):.2f}, {xp.max(L_peaks):.2f}]")
+                if len(widths) > 0:
+                    print(f"  Width range: [{xp.min(widths):.4f}, {xp.max(widths):.4f}]")
+            else:
+                print(f"  WARNING: No peaks found!")
+                print(f"  Possible causes:")
+                print(f"    - Gradient filter too strict (try larger stick_tolerance)")
+                print(f"    - Likelihood function has no clear maximum")
+                print(f"    - Initial sampling didn't reach high-likelihood regions")
         
         if return_bank:
             return peaks, L_peaks, widths, ray_bank, chisao_bank

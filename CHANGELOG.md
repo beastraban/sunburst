@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+# v1.0.1 (2026-02-07)
+
+## New Features
+- Configurable noise tolerance parameters for noisy emulators
+- `assess_noise()` utility for automatic threshold tuning
+
+## Bug Fixes
+- Fixed peak filtering with noisy emulators (cosmopower-jax tested)
+
+## Default Changes
+- CarryTiger stick_tolerance: 1e-6 → 1e-3
+- GreenDragon grad_threshold: 1e-4 → 1e-3
+- GreenDragon saddle_threshold: 1e-6 → 1e-4
+- GreenDragon fd_eps: 1e-5 → 1e-4
+
+## Breaking Changes
+None - fully backward compatible
+
+
+
+
 ## [0.1.0] - 2026-01-26
 
 ### Added

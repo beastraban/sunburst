@@ -27,6 +27,8 @@ from .single_whip import (
     randcoord_line_search_batch,
 )
 
+from .assess_noise import assess_noise
+
 __all__ = [
     # GPU utilities
     "gpu_available",
@@ -45,4 +47,5 @@ __all__ = [
     # SingleWhip toolkit
     "SingleWhip",
     "randcoord_line_search_batch",
+    "assess_noise",
 ]
