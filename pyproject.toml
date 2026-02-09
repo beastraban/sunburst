@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sunburst-bayes"
-version = "1.0.1"
+version = "1.0.2"
 description = "GPU-accelerated Bayesian evidence calculation via radial shooting techniques"
 readme = "README.md"
 license = "MIT"

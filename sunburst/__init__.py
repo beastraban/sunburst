@@ -37,7 +37,7 @@ in honor of Master Donald Rubbo:
 - SingleWhip (單鞭): GPU toolkit
 """
 
-__version__ = "1.0.0"
+__version__ = "1.0.2"
 __author__ = "Ira Wolfson"
 __email__ = "ira.wolfson@braude.ac.il"
 
