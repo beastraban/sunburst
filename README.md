@@ -31,6 +31,13 @@ pip install cupy-cuda11x  # For CUDA 11.x
 pip install cupy-cuda12x  # For CUDA 12.x
 ```
 
+## Did it work for you?
+
+If you used SunBURST — even just to try it — I'd genuinely like to know.
+Drop a note in [Discussions](https://github.com/beastraban/sunburst/discussions)
+or open an [issue](https://github.com/beastraban/sunburst/issues).
+Bug reports, use cases, and "it worked on my problem" are all welcome.
+
 ## Quick Start
 
 ```python
